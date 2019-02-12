@@ -21,10 +21,6 @@ public class CellGrid {
     } while(widthCounter != 0);
   }
 
-  public Cell getCellAt(int xPosition, int yPosition) {
-    return this.grid.get(yPosition).get(xPosition);
-  }
-
   public int getWidth() {
     return this.grid.size();
   }
