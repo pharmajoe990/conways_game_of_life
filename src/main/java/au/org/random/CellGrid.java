@@ -28,4 +28,21 @@ public class CellGrid {
   public int getLength() {
     return this.grid.get(0).size();
   }
+
+  public Cell getCellAt(int xPoint, int yPoint) {
+    return grid.get(xPoint).get(yPoint);
+  }
+
+  public ArrayList<Cell> getNeighbours(int xPoint, int yPoint) {
+    ArrayList<Cell> neighbouringCells = new ArrayList<>(8);
+    neighbouringCells.add(this.getCellAt(xPoint - 1, yPoint - 1));
+    neighbouringCells.add(this.getCellAt(xPoint - 1, yPoint));
+    neighbouringCells.add(this.getCellAt(xPoint - 1, yPoint + 1));
+    neighbouringCells.add(this.getCellAt(xPoint, yPoint - 1));
+    neighbouringCells.add(this.getCellAt(xPoint, yPoint + 1));
+    neighbouringCells.add(this.getCellAt(xPoint + 1, yPoint - 1));
+    neighbouringCells.add(this.getCellAt(xPoint + 1, yPoint));
+    neighbouringCells.add(this.getCellAt(xPoint + 1, yPoint + 1));
+    return neighbouringCells;
+  }
 }
