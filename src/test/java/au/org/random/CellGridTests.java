@@ -13,9 +13,4 @@ public class CellGridTests {
         assertEquals(10, grid.getWidth());
     }
 
-    @Test
-    public void cannotInsertCellOutOfBounds() {
-
-    }
-
 }

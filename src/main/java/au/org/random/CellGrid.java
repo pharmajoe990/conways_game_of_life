@@ -13,7 +13,7 @@ public class CellGrid {
       int lengthCounter = length;
       ArrayList<Cell> line = new ArrayList<>(length);
       do {
-        line.add(new Cell());
+        line.add(new Cell(CellState.DEAD));
         lengthCounter--;
       } while(lengthCounter != 0);
       grid.add(line);
