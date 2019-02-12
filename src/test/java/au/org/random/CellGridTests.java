@@ -50,10 +50,30 @@ public class CellGridTests {
         assertFalse(expectedNeighbouringCells.contains(grid.getCellAt(1,1)));
     }
 
-    //todo
     @Test
     public void doesNotReturnNonNeighbouringCells() {
-
+        CellGrid grid = new CellGrid(5,5);
+        ArrayList<Cell> expectedNeighbouringCells = (ArrayList<Cell>) Stream.of(
+            grid.getCellAt(0, 0),
+            grid.getCellAt(0, 1),
+            grid.getCellAt(0, 2),
+            grid.getCellAt(0, 3),
+            grid.getCellAt(0, 4),
+            grid.getCellAt(1, 0),
+            grid.getCellAt(1, 4),
+            grid.getCellAt(2, 0),
+            grid.getCellAt(2, 4),
+            grid.getCellAt(3, 0),
+            grid.getCellAt(3, 4),
+            grid.getCellAt(4, 0),
+            grid.getCellAt(4, 1),
+            grid.getCellAt(4, 2),
+            grid.getCellAt(4, 3),
+            grid.getCellAt(4, 4)
+        ).collect(Collectors.toList());
+        expectedNeighbouringCells.forEach(cell ->
+            assertFalse(grid.getNeighbours(2, 2).contains(cell))
+        );
     }
 
     @Test void returnsNeighbouringCellsWhenCellIsOnEdge() {

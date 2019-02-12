@@ -33,6 +33,7 @@ public class CellGrid {
     return grid.get(xPoint).get(yPoint);
   }
 
+  //todo refactor
   public ArrayList<Cell> getNeighbours(int xPoint, int yPoint) {
     ArrayList<Cell> neighbouringCells = new ArrayList<>(8);
     neighbouringCells.add(this.getCellAt(xPoint - 1, yPoint - 1));
