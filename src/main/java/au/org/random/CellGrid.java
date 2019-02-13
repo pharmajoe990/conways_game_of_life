@@ -36,14 +36,26 @@ public class CellGrid {
   //todo refactor
   public ArrayList<Cell> getNeighbours(int xPoint, int yPoint) {
     ArrayList<Cell> neighbouringCells = new ArrayList<>(8);
-    neighbouringCells.add(this.getCellAt(xPoint - 1, yPoint - 1));
-    neighbouringCells.add(this.getCellAt(xPoint - 1, yPoint));
-    neighbouringCells.add(this.getCellAt(xPoint - 1, yPoint + 1));
-    neighbouringCells.add(this.getCellAt(xPoint, yPoint - 1));
-    neighbouringCells.add(this.getCellAt(xPoint, yPoint + 1));
-    neighbouringCells.add(this.getCellAt(xPoint + 1, yPoint - 1));
-    neighbouringCells.add(this.getCellAt(xPoint + 1, yPoint));
-    neighbouringCells.add(this.getCellAt(xPoint + 1, yPoint + 1));
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint - 1, yPoint - 1);   //top left
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint - 1, yPoint);              //top
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint - 1, yPoint + 1);   //top right
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint, yPoint - 1);              //left
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint, yPoint + 1);              //right
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint + 1, yPoint - 1);   //bottom left
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint + 1, yPoint);              //bottom
+    this.tryAddNeighbouringCell(neighbouringCells, xPoint + 1, yPoint + 1);   //bottom right
     return neighbouringCells;
   }
+
+  private void tryAddNeighbouringCell(ArrayList<Cell> neighbouringCells, int xPoint, int yPoint) {
+    if (!this.isPointOutOfBounds(xPoint, yPoint)) {
+      neighbouringCells.add(this.getCellAt(xPoint, yPoint));
+    }
+  }
+
+  public boolean isPointOutOfBounds(int xPoint, int yPoint) {
+    return (xPoint < 0 || xPoint > this.grid.size() - 1 )
+        || (yPoint < 0 || yPoint > this.grid.get(0).size() - 1);
+  }
+
 }

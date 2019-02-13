@@ -34,24 +34,20 @@ public class CellGridTests {
     @Test
     public void returnsNeighbouringCells() {
         CellGrid grid = new CellGrid(3,3);
-        ArrayList<Cell> expectedNeighbouringCells = (ArrayList<Cell>) Stream.of(
-          grid.getCellAt(0, 0),
-          grid.getCellAt(0, 1),
-          grid.getCellAt(0, 2),
-          grid.getCellAt(1, 0),
-          grid.getCellAt(1, 2),
-          grid.getCellAt(2, 0),
-          grid.getCellAt(2, 1),
-          grid.getCellAt(2, 2)
-        ).collect(Collectors.toList());
-        expectedNeighbouringCells.forEach(cell ->
-            assertTrue(grid.getNeighbours(1, 1).contains(cell))
-        );
-        assertFalse(expectedNeighbouringCells.contains(grid.getCellAt(1,1)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(0, 0)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(0, 1)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(0, 2)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(1, 0)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(1, 2)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(2, 0)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(2, 1)));
+        assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(2, 2)));
+        assertFalse(grid.getNeighbours(1,1 ).contains(grid.getCellAt(1,1)));
     }
 
     @Test
     public void doesNotReturnNonNeighbouringCells() {
+        //todo refactor out of stream
         CellGrid grid = new CellGrid(5,5);
         ArrayList<Cell> expectedNeighbouringCells = (ArrayList<Cell>) Stream.of(
             grid.getCellAt(0, 0),
@@ -76,8 +72,29 @@ public class CellGridTests {
         );
     }
 
-    @Test void returnsNeighbouringCellsWhenCellIsOnEdge() {
+    @Test void returnsTrueWhenCellIsOutOfBounds() {
+        CellGrid grid = new CellGrid(2,2);
+        assertTrue(grid.isPointOutOfBounds(-1,0));
+        assertTrue(grid.isPointOutOfBounds(0,2));
+    }
 
+    @Test void returnsFalseWhenCellIsNotOutOfBounds() {
+        CellGrid grid = new CellGrid(2,2);
+        assertFalse(grid.isPointOutOfBounds(0,0));
+        assertFalse(grid.isPointOutOfBounds(0,1));
+        assertFalse(grid.isPointOutOfBounds(1,0));
+        assertFalse(grid.isPointOutOfBounds(1,1));
+    }
+
+    @Test void returnsNeighbouringCellsWhenCellIsOnEdge() {
+        CellGrid grid = new CellGrid(5,5);
+        ArrayList<Cell> neighbours = grid.getNeighbours(0,2);
+        assertTrue(neighbours.contains(grid.getCellAt(0, 1)));
+        assertTrue(neighbours.contains(grid.getCellAt(0, 3)));
+        assertTrue(neighbours.contains(grid.getCellAt(1, 1)));
+        assertTrue(neighbours.contains(grid.getCellAt(1, 2)));
+        assertTrue(neighbours.contains(grid.getCellAt(1, 3)));
+        assertFalse(grid.getNeighbours(0,0).contains(grid.getCellAt(0,0)));
     }
 
     @Test void returnsNeighbouringCellsWhenCellIsACorner() {
