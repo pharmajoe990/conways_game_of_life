@@ -12,17 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CellGridTests {
+class CellGridTests {
 
-    @Test
-    public void createsGridWithDimensions() {
+    @Test void createsGridWithDimensions() {
         CellGrid grid = new CellGrid(10,10);
         assertEquals(10, grid.getLength());
         assertEquals(10, grid.getWidth());
     }
 
-    @Test
-    public void returnsCellAtPoint() {
+    @Test void returnsCellAtPoint() {
         CellGrid grid = new CellGrid(2,2);
         Cell cellToCheck = grid.getCellAt(0,0);
         assertSame(cellToCheck, grid.getCellAt(0,0));
@@ -31,8 +29,7 @@ public class CellGridTests {
         assertNotSame(cellToCheck, grid.getCellAt(1,1));
     }
 
-    @Test
-    public void returnsNeighbouringCells() {
+    @Test void returnsNeighbouringCells() {
         CellGrid grid = new CellGrid(3,3);
         assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(0, 0)));
         assertTrue(grid.getNeighbours(1, 1).contains(grid.getCellAt(0, 1)));
@@ -45,8 +42,7 @@ public class CellGridTests {
         assertFalse(grid.getNeighbours(1,1 ).contains(grid.getCellAt(1,1)));
     }
 
-    @Test
-    public void doesNotReturnNonNeighbouringCells() {
+    @Test void doesNotReturnNonNeighbouringCells() {
         //todo refactor out of stream
         CellGrid grid = new CellGrid(5,5);
         ArrayList<Cell> expectedNeighbouringCells = (ArrayList<Cell>) Stream.of(
@@ -144,6 +140,38 @@ public class CellGridTests {
     }
 
     @Test void returnsNeighbouringCellsWhenCellIsACorner() {
+        /*
+         *     Should contain (x) below cells
+         *     o x -
+         *     x x -
+         *     - - -
+         */
+        CellGrid grid = new CellGrid(3,3);
+        ArrayList<Cell> neighbours = grid.getNeighbours(0,0);
+        assertFalse(neighbours.contains(grid.getCellAt(0, 0)));
 
+        assertTrue(grid.getNeighbours(0,0).contains(grid.getCellAt(0,1)));
+        assertTrue(grid.getNeighbours(0,0).contains(grid.getCellAt(1,0)));
+        assertTrue(grid.getNeighbours(0,0).contains(grid.getCellAt(1,1)));
+    }
+
+    @Test void doesNotReturnNonNeighbouringCellsWhenCellIsACorner() {
+        /*
+         *     Should not contain (-) below cells
+         *     o x -
+         *     x x -
+         *     - - -
+         */
+        CellGrid grid = new CellGrid(3,3);
+        ArrayList<Cell> neighbours = grid.getNeighbours(0,0);
+
+        assertFalse(neighbours.contains(grid.getCellAt(0, 2)));
+        assertFalse(neighbours.contains(grid.getCellAt(1, 2)));
+
+        assertFalse(neighbours.contains(grid.getCellAt(2, 0)));
+        assertFalse(neighbours.contains(grid.getCellAt(2, 1)));
+        assertFalse(neighbours.contains(grid.getCellAt(2, 2)));
+
+        assertFalse(grid.getNeighbours(0,0).contains(grid.getCellAt(0,0)));
     }
 }
