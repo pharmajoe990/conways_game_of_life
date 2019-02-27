@@ -1,6 +1,6 @@
 package au.org.random;
 
-import au.org.random.TransitionRules.CellStateChangeRule;
+import au.org.random.TransitionRules.CellStateRule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ class Cell {
     this.neighbours.add(neighbour);
   }
 
-  void checkAndApplyStateChange(CellStateChangeRule rule) {
+  void checkAndApplyStateChange(CellStateRule rule) {
     this.state = rule.checkForStateChange(this.state, this.getNumberOfLivingNeighbours());
   }
 
