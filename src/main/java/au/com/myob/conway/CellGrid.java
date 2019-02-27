@@ -1,4 +1,4 @@
-package au.org.random;
+package au.com.myob.conway;
 
 import java.util.ArrayList;
 

@@ -1,9 +1,9 @@
-package au.org.random;
+package au.com.myob.conway;
 
-import au.org.random.TransitionRules.Overpopulation;
-import au.org.random.TransitionRules.Reproduction;
-import au.org.random.TransitionRules.SurviveGeneration;
-import au.org.random.TransitionRules.Underpopulation;
+import au.com.myob.conway.TransitionRules.Overpopulation;
+import au.com.myob.conway.TransitionRules.Reproduction;
+import au.com.myob.conway.TransitionRules.SurviveGeneration;
+import au.com.myob.conway.TransitionRules.Underpopulation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

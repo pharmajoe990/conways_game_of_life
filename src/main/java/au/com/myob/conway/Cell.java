@@ -1,6 +1,6 @@
-package au.org.random;
+package au.com.myob.conway;
 
-import au.org.random.TransitionRules.CellStateRule;
+import au.com.myob.conway.TransitionRules.CellStateRule;
 
 import java.util.ArrayList;
 import java.util.List;
