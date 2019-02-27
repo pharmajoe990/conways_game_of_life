@@ -2,11 +2,11 @@ package au.org.random;
 
 import java.util.ArrayList;
 
-public class CellGrid {
+class CellGrid {
 
   private ArrayList<ArrayList<Cell>> grid;
 
-  public CellGrid(int length, int width) {
+  CellGrid(int length, int width) {
     this.grid = new ArrayList<>(length);
     int widthCounter = width;
     do {
@@ -21,20 +21,20 @@ public class CellGrid {
     } while(widthCounter != 0);
   }
 
-  public int getWidth() {
+  int getWidth() {
     return this.grid.size();
   }
 
-  public int getLength() {
+  int getLength() {
     return this.grid.get(0).size();
   }
 
-  public Cell getCellAt(int xPoint, int yPoint) {
+  Cell getCellAt(int xPoint, int yPoint) {
     return grid.get(xPoint).get(yPoint);
   }
 
   //todo refactor
-  public ArrayList<Cell> getNeighbours(int xPoint, int yPoint) {
+  ArrayList<Cell> getNeighbours(int xPoint, int yPoint) {
     ArrayList<Cell> neighbouringCells = new ArrayList<>(8);
     this.tryAddNeighbouringCell(neighbouringCells, xPoint - 1, yPoint - 1);   //top left
     this.tryAddNeighbouringCell(neighbouringCells, xPoint - 1, yPoint);              //top
@@ -53,7 +53,7 @@ public class CellGrid {
     }
   }
 
-  public boolean isPointOutOfBounds(int xPoint, int yPoint) {
+  boolean isPointOutOfBounds(int xPoint, int yPoint) {
     return (xPoint < 0 || xPoint > this.grid.size() - 1 )
         || (yPoint < 0 || yPoint > this.grid.get(0).size() - 1);
   }

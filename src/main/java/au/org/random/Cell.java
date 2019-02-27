@@ -1,19 +1,40 @@
 package au.org.random;
 
-public class Cell {
+import au.org.random.TransitionRules.CellStateChangeRule;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class Cell {
 
   private CellState state;
+  private List<Cell> neighbours;
 
-  public Cell(CellState state) {
+  Cell(CellState state) {
     this.state = state;
+    this.neighbours = new ArrayList<>();
   }
 
-  public boolean isAlive() {
+  boolean isAlive() {
     return this.state == CellState.ALIVE;
   }
 
-  public void kill() {
+  void kill() {
     this.state = CellState.DEAD;
   }
 
+  void addNeighbour(Cell neighbour) {
+    this.neighbours.add(neighbour);
+  }
+
+  void checkAndApplyStateChange(CellStateChangeRule rule) {
+    this.state = rule.checkForStateChange(this.state, this.getNumberOfLivingNeighbours());
+  }
+
+  long getNumberOfLivingNeighbours() {
+    return this.neighbours
+        .stream()
+        .filter(cell -> cell.state.equals(CellState.ALIVE))
+        .count();
+  }
 }
