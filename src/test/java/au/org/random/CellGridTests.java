@@ -87,13 +87,59 @@ public class CellGridTests {
     }
 
     @Test void returnsNeighbouringCellsWhenCellIsOnEdge() {
+      /*
+       *     Should contain (x) below cells
+       *     - x o x -
+       *     - x x x -
+       *     - - - - -
+       *     - - - - -
+       *     - - - - -
+       */
+      CellGrid grid = new CellGrid(5,5);
+      ArrayList<Cell> neighbours = grid.getNeighbours(0,2);
+      assertTrue(neighbours.contains(grid.getCellAt(0, 1)));
+      assertTrue(neighbours.contains(grid.getCellAt(0, 3)));
+      assertTrue(neighbours.contains(grid.getCellAt(1, 1)));
+      assertTrue(neighbours.contains(grid.getCellAt(1, 2)));
+      assertTrue(neighbours.contains(grid.getCellAt(1, 3)));
+      assertFalse(grid.getNeighbours(0,0).contains(grid.getCellAt(0,0)));
+    }
+
+    @Test void doesNotReturnNonNeighbouringCellsWhenCellIsOnEdge() {
+        /*
+         *     Should not contain (-) below cells
+         *     - x o x -
+         *     - x x x -
+         *     - - - - -
+         *     - - - - -
+         *     - - - - -
+         */
         CellGrid grid = new CellGrid(5,5);
         ArrayList<Cell> neighbours = grid.getNeighbours(0,2);
-        assertTrue(neighbours.contains(grid.getCellAt(0, 1)));
-        assertTrue(neighbours.contains(grid.getCellAt(0, 3)));
-        assertTrue(neighbours.contains(grid.getCellAt(1, 1)));
-        assertTrue(neighbours.contains(grid.getCellAt(1, 2)));
-        assertTrue(neighbours.contains(grid.getCellAt(1, 3)));
+
+        assertFalse(neighbours.contains(grid.getCellAt(0, 0)));
+        assertFalse(neighbours.contains(grid.getCellAt(0, 4)));
+        assertFalse(neighbours.contains(grid.getCellAt(1, 0)));
+        assertFalse(neighbours.contains(grid.getCellAt(1, 4)));
+
+        assertFalse(neighbours.contains(grid.getCellAt(2, 0)));
+        assertFalse(neighbours.contains(grid.getCellAt(2, 1)));
+        assertFalse(neighbours.contains(grid.getCellAt(2, 2)));
+        assertFalse(neighbours.contains(grid.getCellAt(2, 3)));
+        assertFalse(neighbours.contains(grid.getCellAt(2, 4)));
+
+        assertFalse(neighbours.contains(grid.getCellAt(3, 0)));
+        assertFalse(neighbours.contains(grid.getCellAt(3, 1)));
+        assertFalse(neighbours.contains(grid.getCellAt(3, 2)));
+        assertFalse(neighbours.contains(grid.getCellAt(3, 3)));
+        assertFalse(neighbours.contains(grid.getCellAt(3, 4)));
+
+        assertFalse(neighbours.contains(grid.getCellAt(4, 0)));
+        assertFalse(neighbours.contains(grid.getCellAt(4, 1)));
+        assertFalse(neighbours.contains(grid.getCellAt(4, 2)));
+        assertFalse(neighbours.contains(grid.getCellAt(4, 3)));
+        assertFalse(neighbours.contains(grid.getCellAt(4, 4)));
+
         assertFalse(grid.getNeighbours(0,0).contains(grid.getCellAt(0,0)));
     }
 
