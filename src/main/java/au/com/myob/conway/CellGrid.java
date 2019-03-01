@@ -1,12 +1,21 @@
 package au.com.myob.conway;
 
 import java.util.ArrayList;
+import java.util.List;
 
+/*
+TODO Refactor separate grid iteration to be generic
+ */
 class CellGrid {
 
   private ArrayList<ArrayList<Cell>> grid;
 
   CellGrid(int length, int width) {
+    initializeGrid(length, width);
+    initializeNeighbourhood();
+  }
+
+  private void initializeGrid(int length, int width) {
     this.grid = new ArrayList<>(length);
     int widthCounter = width;
     do {
@@ -31,6 +40,17 @@ class CellGrid {
 
   Cell getCellAt(int xPoint, int yPoint) {
     return grid.get(xPoint).get(yPoint);
+  }
+
+  private void initializeNeighbourhood() {
+    for (int i = 0; i < this.grid.size(); i++) {
+      ArrayList<Cell> currentRow = this.grid.get(i);
+      for (int j = 0; j < currentRow.size(); j++) {
+        Cell cellAtPoint = this.grid.get(i).get(j);
+        List<Cell> neighbours = getNeighbours(i, j);
+        neighbours.forEach(cellAtPoint::addNeighbour);
+      }
+    }
   }
 
   //todo refactor
@@ -58,4 +78,79 @@ class CellGrid {
         || (yPoint < 0 || yPoint > this.grid.get(0).size() - 1);
   }
 
+  //todo bounds checking
+  boolean isRowStateEqual(int rowNumber, CellState[] rowState) {
+    ArrayList<Cell> rowToCheck = this.grid.get(rowNumber);
+    for (int i = 0; i < rowToCheck.size(); i++) {
+      if(!rowToCheck.get(i).doesStateEqual(rowState[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void reviveCellAt(int xPoint, int yPoint) {
+    this.getCellAt(xPoint, yPoint).revive();
+  }
+
+  void cycle() {
+    for (int i = 0; i < this.grid.size(); i++) {
+      ArrayList<Cell> currentRow = this.grid.get(i);
+      for (int j = 0; j < currentRow.size(); j++) {
+        this.grid.get(i).get(j).applyRules();
+      }
+    }
+    for (int i = 0; i < this.grid.size(); i++) {
+      ArrayList<Cell> currentRow = this.grid.get(i);
+      for (int j = 0; j < currentRow.size(); j++) {
+        this.grid.get(i).get(j).applyStateChange();
+      }
+    }
+  }
+
+  boolean equals(CellGrid otherGrid) {
+    return this.gridSizesAreEqual(otherGrid) && this.gridStatesAreEqual(otherGrid);
+  }
+
+  private boolean gridSizesAreEqual(CellGrid otherGrid) {
+    if(this.getRowCount() != otherGrid.getRowCount()) {
+      return false;
+    }
+    for (int i = 0; i < this.grid.size(); i++) {
+      if(this.grid.get(i).size() != otherGrid.getRow(i).size()) return false;
+    }
+    return true;
+  }
+
+  private ArrayList<Cell> getRow(int rowNumber) {
+    return this.grid.get(rowNumber);
+  }
+
+  private boolean gridStatesAreEqual(CellGrid otherGrid) {
+    for (int i = 0; i < this.grid.size(); i++) {
+      ArrayList<Cell> currentRow = this.grid.get(i);
+      for (int j = 0; j < currentRow.size(); j++) {
+        if(otherGrid.getCellAt(i, j).getState() != currentRow.get(j).getState()) return false;
+      }
+    }
+    return true;
+  }
+
+  private long getRowCount() {
+    return this.grid.size();
+  }
+
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < this.grid.size(); i++) {
+      ArrayList<Cell> currentRow = this.grid.get(i);
+      for (int j = 0; j < currentRow.size(); j++) {
+        Cell cell = this.grid.get(i).get(j);
+        sb.append(cell.toString());
+        sb.append(" ");
+      }
+      sb.append("\n");
+    }
+    return sb.toString();
+  }
 }

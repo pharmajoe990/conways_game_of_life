@@ -11,6 +11,7 @@ class Cell {
 
   Cell(CellState state) {
     this.state = state;
+    this.nextState = CellState.DEAD;
     this.neighbours = new ArrayList<>();
   }
 
