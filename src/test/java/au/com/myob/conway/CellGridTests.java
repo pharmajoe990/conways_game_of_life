@@ -176,129 +176,28 @@ class CellGridTests {
     }
 
     @Test void cellGridShouldCycleWithBlinkerOscillatorPattern() {
-      //todo finish implementation, migrate to comparison tools
-        /* https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns
-         *
-         *   Initial State (o dead, x alive)
-         *
-         *     o o o o o
-         *     o o O o o
-         *     o o O o o
-         *     o o O o o
-         *     o o o o o
-         *
-         *     Cycle state
-         *
-         *     o o o o o
-         *     o o o o o
-         *     o O O O o
-         *     o o o o o
-         *     o o o o o
-         */
         //Given
-        CellGrid grid = new CellGrid(5,5);
-        grid.reviveCellAt(1, 2);
-        grid.reviveCellAt(2, 2);
-        grid.reviveCellAt(3, 2);
-        CellState[] rowOneState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(0, rowOneState));
-        CellState[] rowTwoState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.ALIVE,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(1, rowTwoState));
-        CellState[] rowthreeState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.ALIVE,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(2, rowthreeState));
-        CellState[] rowFourState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.ALIVE,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(3, rowFourState));
-        CellState[] rowFiveState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(4, rowFiveState));
+        String encodedCellGrid = "xxxxx|xxoxx|xxoxx|xxoxx|xxxxx|";
+        CellGrid grid = GridCodec.decode(encodedCellGrid);
+        String encodedCycledGrid = "xxxxx|xxxxx|xooox|xxxxx|xxxxx|";
+        CellGrid cycledGrid = GridCodec.decode(encodedCycledGrid);
 
         //When
         grid.cycle();
 
         //Then
-        CellState[] rowOneCycledState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(0, rowOneCycledState));
-        CellState[] rowTwoCycledState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(1, rowTwoCycledState));
-        CellState[] rowThreeCycledState = {
-            CellState.DEAD,
-            CellState.ALIVE,
-            CellState.ALIVE,
-            CellState.ALIVE,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(2, rowThreeCycledState));
-        CellState[] rowFourCycledState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(3, rowFourCycledState));
-        CellState[] rowFiveCycledState = {
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD,
-            CellState.DEAD
-        };
-        assertTrue(grid.isRowStateEqual(0, rowFiveCycledState));
+        assertTrue(grid.equals(cycledGrid));
     }
 
-    @Test public void TwoMatchingGridStatesAreEqual() {
+    @Test void TwoMatchingGridStatesAreEqual() {
        CellGrid gridOne = new CellGrid(3,3);
        CellGrid gridTwo = new CellGrid(3,3);
         assertTrue(gridOne.equals(gridTwo));
     }
 
-    @Test public void TwoNonMatchingGridStatesAreNotEqual() {
-        CellGrid gridOne = new CellGrid(3,3);
-        gridOne.reviveCellAt(0,1);
-        CellGrid gridTwo = new CellGrid(3,3);
-        gridOne.reviveCellAt(2,1);
-        gridOne.reviveCellAt(2,2);
+    @Test void TwoNonMatchingGridStatesAreNotEqual() {
+        CellGrid gridOne = GridCodec.decode("xxo|xxx|xxx");
+        CellGrid gridTwo = GridCodec.decode("xxx|xxx|xoo");
         assertFalse(gridOne.equals(gridTwo));
     }
 

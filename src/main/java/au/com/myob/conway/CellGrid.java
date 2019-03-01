@@ -8,10 +8,15 @@ TODO Refactor separate grid iteration to be generic
  */
 class CellGrid {
 
-  private ArrayList<ArrayList<Cell>> grid;
+  private List<List<Cell>> grid;
 
   CellGrid(int length, int width) {
     initializeGrid(length, width);
+    initializeNeighbourhood();
+  }
+
+  CellGrid(List<List<Cell>> gridRows) {
+    this.grid = gridRows;
     initializeNeighbourhood();
   }
 
@@ -44,7 +49,7 @@ class CellGrid {
 
   private void initializeNeighbourhood() {
     for (int i = 0; i < this.grid.size(); i++) {
-      ArrayList<Cell> currentRow = this.grid.get(i);
+      List<Cell> currentRow = this.grid.get(i);
       for (int j = 0; j < currentRow.size(); j++) {
         Cell cellAtPoint = this.grid.get(i).get(j);
         List<Cell> neighbours = getNeighbours(i, j);
@@ -80,7 +85,7 @@ class CellGrid {
 
   //todo bounds checking
   boolean isRowStateEqual(int rowNumber, CellState[] rowState) {
-    ArrayList<Cell> rowToCheck = this.grid.get(rowNumber);
+    List<Cell> rowToCheck = this.grid.get(rowNumber);
     for (int i = 0; i < rowToCheck.size(); i++) {
       if(!rowToCheck.get(i).doesStateEqual(rowState[i])) {
         return false;
@@ -94,16 +99,14 @@ class CellGrid {
   }
 
   void cycle() {
-    for (int i = 0; i < this.grid.size(); i++) {
-      ArrayList<Cell> currentRow = this.grid.get(i);
-      for (int j = 0; j < currentRow.size(); j++) {
-        this.grid.get(i).get(j).applyRules();
+    for (List<Cell> currentRow : this.grid) {
+      for (Cell cell : currentRow) {
+        cell.applyRules();
       }
     }
-    for (int i = 0; i < this.grid.size(); i++) {
-      ArrayList<Cell> currentRow = this.grid.get(i);
-      for (int j = 0; j < currentRow.size(); j++) {
-        this.grid.get(i).get(j).applyStateChange();
+    for (List<Cell> currentRow : this.grid) {
+      for (Cell cell : currentRow) {
+        cell.applyStateChange();
       }
     }
   }
@@ -122,13 +125,13 @@ class CellGrid {
     return true;
   }
 
-  private ArrayList<Cell> getRow(int rowNumber) {
+  private List<Cell> getRow(int rowNumber) {
     return this.grid.get(rowNumber);
   }
 
   private boolean gridStatesAreEqual(CellGrid otherGrid) {
     for (int i = 0; i < this.grid.size(); i++) {
-      ArrayList<Cell> currentRow = this.grid.get(i);
+      List<Cell> currentRow = this.grid.get(i);
       for (int j = 0; j < currentRow.size(); j++) {
         if(otherGrid.getCellAt(i, j).getState() != currentRow.get(j).getState()) return false;
       }
@@ -142,10 +145,8 @@ class CellGrid {
 
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    for (int i = 0; i < this.grid.size(); i++) {
-      ArrayList<Cell> currentRow = this.grid.get(i);
-      for (int j = 0; j < currentRow.size(); j++) {
-        Cell cell = this.grid.get(i).get(j);
+    for (List<Cell> currentRow : this.grid) {
+      for (Cell cell : currentRow) {
         sb.append(cell.toString());
         sb.append(" ");
       }
