@@ -1,9 +1,5 @@
 package au.com.myob.conway;
 
-import au.com.myob.conway.TransitionRules.Overpopulation;
-import au.com.myob.conway.TransitionRules.Reproduction;
-import au.com.myob.conway.TransitionRules.SurviveGeneration;
-import au.com.myob.conway.TransitionRules.Underpopulation;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +26,8 @@ class CellTests {
     @Test void liveCellDiesDueToUnderPopulation() {
         Cell cell = new Cell(CellState.ALIVE);
         cell.addNeighbour(new Cell(CellState.ALIVE));
-        cell.checkAndApplyStateChange(Underpopulation::checkForStateChange);
+        cell.applyRules();
+        cell.applyStateChange();
         assertFalse(cell.isAlive());
     }
 
@@ -38,7 +35,8 @@ class CellTests {
         Cell cell = new Cell(CellState.ALIVE);
         cell.addNeighbour(new Cell(CellState.ALIVE));
         cell.addNeighbour(new Cell(CellState.ALIVE));
-        cell.checkAndApplyStateChange(SurviveGeneration::checkForStateChange);
+        cell.applyRules();
+        cell.applyStateChange();
         assertTrue(cell.isAlive());
     }
 
@@ -47,7 +45,8 @@ class CellTests {
         cell.addNeighbour(new Cell(CellState.ALIVE));
         cell.addNeighbour(new Cell(CellState.ALIVE));
         cell.addNeighbour(new Cell(CellState.ALIVE));
-        cell.checkAndApplyStateChange(SurviveGeneration::checkForStateChange);
+        cell.applyRules();
+        cell.applyStateChange();
         assertTrue(cell.isAlive());
     }
 
@@ -57,7 +56,8 @@ class CellTests {
         cell.addNeighbour(new Cell(CellState.ALIVE));
         cell.addNeighbour(new Cell(CellState.ALIVE));
         cell.addNeighbour(new Cell(CellState.ALIVE));
-        cell.checkAndApplyStateChange(Overpopulation::checkForStateChange);
+        cell.applyRules();
+        cell.applyStateChange();
         assertFalse(cell.isAlive());
     }
 
@@ -66,7 +66,36 @@ class CellTests {
         cell.addNeighbour(new Cell(CellState.ALIVE));
         cell.addNeighbour(new Cell(CellState.ALIVE));
         cell.addNeighbour(new Cell(CellState.ALIVE));
-        cell.checkAndApplyStateChange(Reproduction::checkForStateChange);
+        cell.applyRules();
+        cell.applyStateChange();
         assertTrue(cell.isAlive());
     }
+
+    @Test void shouldApplySurviveGenerationStateChangeOnlyWhenAllRulesApply() {
+        Cell cell = new Cell(CellState.ALIVE);
+        cell.addNeighbour(new Cell(CellState.ALIVE));
+        cell.addNeighbour(new Cell(CellState.ALIVE));
+        cell.applyRules();
+        cell.applyStateChange();
+        assertTrue(cell.isAlive());
+    }
+
+    @Test void deadCellWithThreeNeighboursBecomesAliveWhenAllRulesApply() {
+        Cell cell = new Cell(CellState.DEAD);
+        cell.addNeighbour(new Cell(CellState.ALIVE));
+        cell.addNeighbour(new Cell(CellState.ALIVE));
+        cell.addNeighbour(new Cell(CellState.ALIVE));
+        cell.applyRules();
+        cell.applyStateChange();
+        assertTrue(cell.isAlive());
+    }
+//
+//    @Test void deadCellWithNoNeighboursShouldHaveNoStateChange() {
+//        Cell cell = new Cell(CellState.ALIVE);
+//        cell.addNeighbour(new Cell(CellState.ALIVE));
+//        cell.addNeighbour(new Cell(CellState.ALIVE));
+//        cell.applyNextState(SurviveGeneration::checkForStateChange);
+//        cell.applyStateChange();
+//        assertTrue(cell.isAlive());
+//    }
 }

@@ -1,13 +1,12 @@
 package au.com.myob.conway;
 
-import au.com.myob.conway.TransitionRules.CellStateRule;
-
 import java.util.ArrayList;
 import java.util.List;
 
 class Cell {
 
   private CellState state;
+  private CellState nextState;
   private List<Cell> neighbours;
 
   Cell(CellState state) {
@@ -23,12 +22,12 @@ class Cell {
     this.state = CellState.DEAD;
   }
 
-  void addNeighbour(Cell neighbour) {
-    this.neighbours.add(neighbour);
+  void revive() {
+    this.state = CellState.ALIVE;
   }
 
-  void checkAndApplyStateChange(CellStateRule rule) {
-    this.state = rule.checkForStateChange(this.state, this.getNumberOfLivingNeighbours());
+  void addNeighbour(Cell neighbour) {
+    this.neighbours.add(neighbour);
   }
 
   long getNumberOfLivingNeighbours() {
@@ -36,5 +35,43 @@ class Cell {
         .stream()
         .filter(cell -> cell.state.equals(CellState.ALIVE))
         .count();
+  }
+
+  boolean doesStateEqual(CellState stateToCompare) {
+    return this.state.equals(stateToCompare);
+  }
+
+  CellState getState() {
+    return this.state;
+  }
+
+  void applyStateChange() {
+    this.state = this.nextState;
+  }
+
+  void applyRules() {
+    //UnderPopulation
+    if(this.state.equals(CellState.ALIVE) && this.getNumberOfLivingNeighbours() < 2) {
+      this.nextState = CellState.DEAD;
+    }
+    //Survive to next generation
+    if(this.state.equals(CellState.ALIVE)
+        && (this.getNumberOfLivingNeighbours() == 2 || this.getNumberOfLivingNeighbours() == 3)) {
+      this.nextState = CellState.ALIVE;
+    }
+    //Overpopulation
+    if(this.state.equals(CellState.ALIVE) && this.getNumberOfLivingNeighbours() > 3) {
+      this.nextState = CellState.DEAD;
+    }
+    //Reproduction
+    if(this.state.equals(CellState.DEAD) && this.getNumberOfLivingNeighbours() == 3) {
+      this.nextState = CellState.ALIVE;
+    }
+  }
+
+  public String toString() {
+    return this.isAlive()
+        ? "O"
+        : "x";
   }
 }
